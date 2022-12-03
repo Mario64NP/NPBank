@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Model;
-using System.Linq;
 
 namespace DatabaseContext
 {

@@ -92,8 +92,7 @@ namespace DatabaseContext.Migrations
                         name: "FK_ExchangeRates_Currency_ToCurrencyID",
                         column: x => x.ToCurrencyID,
                         principalTable: "Currency",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
@@ -147,8 +146,7 @@ namespace DatabaseContext.Migrations
                         name: "FK_Transactions_FiscalAccount_ToAccountID",
                         column: x => x.ToAccountID,
                         principalTable: "FiscalAccount",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateIndex(
