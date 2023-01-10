@@ -7,6 +7,8 @@ namespace DatabaseContext
     {
         public DbSet<Client> Clients { get; set; }
         public DbSet<BankAccount> BankAccounts { get; set; }
+        public DbSet<FiscalAccount> FiscalAccounts { get; set; }
+        public DbSet<Currency> Currencies { get; set; }
         public DbSet<ExchangeRate> ExchangeRates { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
 

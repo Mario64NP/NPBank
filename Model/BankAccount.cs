@@ -9,5 +9,10 @@ namespace Model
         public Client Owner { get; set; }
         public DateTime DateCreated { get; set; }
         public List<FiscalAccount> FiscalAccounts { get; set; }
+
+        public override string ToString()
+        {
+            return Owner.Name + $"'s account (ID: {ID})";
+        }
     }
 }
