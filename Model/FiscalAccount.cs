@@ -12,5 +12,13 @@
         {
             return Number;
         }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null || obj is not FiscalAccount) 
+                return false;
+
+            return ((FiscalAccount)obj).ID == ID;
+        }
     }
 }

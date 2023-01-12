@@ -10,5 +10,13 @@
         {
             return Name;
         }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null || obj is not Currency) 
+                return false;
+
+            return ((Currency)obj).ID == ID;
+        }
     }
 }

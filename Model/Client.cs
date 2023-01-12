@@ -12,5 +12,13 @@
         {
             return Name;
         }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null || obj is not Client) 
+                return false;
+
+            return ((Client)obj).ID == ID;
+        }
     }
 }

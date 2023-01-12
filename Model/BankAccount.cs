@@ -14,5 +14,13 @@ namespace Model
         {
             return Owner.Name + $"'s account (ID: {ID})";
         }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null || obj is not BankAccount) 
+                return false;
+
+            return ((BankAccount)obj).ID == ID;
+        }
     }
 }
