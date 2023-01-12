@@ -97,6 +97,7 @@
             this.cmbAccountFrom.Name = "cmbAccountFrom";
             this.cmbAccountFrom.Size = new System.Drawing.Size(200, 23);
             this.cmbAccountFrom.TabIndex = 6;
+            this.cmbAccountFrom.SelectedIndexChanged += new System.EventHandler(this.cmbAccountFrom_SelectedIndexChanged);
             // 
             // cmbAccountTo
             // 
@@ -108,6 +109,7 @@
             // 
             // btnOK
             // 
+            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnOK.Location = new System.Drawing.Point(30, 190);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
@@ -117,6 +119,7 @@
             // 
             // btnCancel
             // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Location = new System.Drawing.Point(295, 190);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -130,7 +133,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(404, 241);
+            this.ClientSize = new System.Drawing.Size(404, 236);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.cmbAccountTo);

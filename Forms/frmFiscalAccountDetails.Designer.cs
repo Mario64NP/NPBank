@@ -72,7 +72,7 @@
             this.txtAccountNumber.Location = new System.Drawing.Point(170, 27);
             this.txtAccountNumber.Name = "txtAccountNumber";
             this.txtAccountNumber.Size = new System.Drawing.Size(200, 23);
-            this.txtAccountNumber.TabIndex = 3;
+            this.txtAccountNumber.TabIndex = 0;
             // 
             // cmbCurrency
             // 
@@ -80,30 +80,32 @@
             this.cmbCurrency.Location = new System.Drawing.Point(170, 67);
             this.cmbCurrency.Name = "cmbCurrency";
             this.cmbCurrency.Size = new System.Drawing.Size(200, 23);
-            this.cmbCurrency.TabIndex = 4;
+            this.cmbCurrency.TabIndex = 1;
             // 
             // txtBalance
             // 
             this.txtBalance.Location = new System.Drawing.Point(170, 107);
             this.txtBalance.Name = "txtBalance";
             this.txtBalance.Size = new System.Drawing.Size(200, 23);
-            this.txtBalance.TabIndex = 5;
+            this.txtBalance.TabIndex = 2;
             // 
             // btnOK
             // 
+            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnOK.Location = new System.Drawing.Point(30, 190);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 6;
+            this.btnOK.TabIndex = 4;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             // 
             // btnCancel
             // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Location = new System.Drawing.Point(295, 190);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 7;
+            this.btnCancel.TabIndex = 5;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
@@ -122,7 +124,7 @@
             this.cmbBAccount.Location = new System.Drawing.Point(170, 147);
             this.cmbBAccount.Name = "cmbBAccount";
             this.cmbBAccount.Size = new System.Drawing.Size(200, 23);
-            this.cmbBAccount.TabIndex = 9;
+            this.cmbBAccount.TabIndex = 3;
             // 
             // frmFiscalAccountDetails
             // 
