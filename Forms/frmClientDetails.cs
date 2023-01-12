@@ -38,5 +38,10 @@ namespace Forms
                 txtOwner.Visible = true;
             }
         }
+
+        public void DisableCmbType()
+        {
+            cmbType.Enabled = false;
+        }
     }
 }

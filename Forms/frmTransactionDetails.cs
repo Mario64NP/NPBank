@@ -27,7 +27,18 @@ namespace Forms
 
             _bankContext.FiscalAccounts.Load();
             cmbAccountFrom.DataSource = _bankContext.FiscalAccounts.Local.ToObservableCollection();
-            cmbAccountTo.DataSource = _bankContext.FiscalAccounts.Local.ToObservableCollection();
+        }
+
+        private void cmbAccountFrom_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            cmbAccountTo.DataSource = OtherAccounts((FiscalAccount)cmbAccountFrom.SelectedItem);
+        }
+
+        private List<FiscalAccount> OtherAccounts(FiscalAccount selectedItem)
+        {
+            List<FiscalAccount> accounts = _bankContext.FiscalAccounts.Local.ToList();
+            accounts.Remove(selectedItem); 
+            return accounts;
         }
     }
 }

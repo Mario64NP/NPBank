@@ -115,9 +115,11 @@
             this.dgvClients.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvClients.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvClients.Location = new System.Drawing.Point(3, 3);
+            this.dgvClients.MultiSelect = false;
             this.dgvClients.Name = "dgvClients";
             this.dgvClients.ReadOnly = true;
             this.dgvClients.RowTemplate.Height = 25;
+            this.dgvClients.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvClients.Size = new System.Drawing.Size(786, 380);
             this.dgvClients.TabIndex = 1;
             // 
@@ -192,9 +194,11 @@
             this.dgvBAccounts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvBAccounts.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvBAccounts.Location = new System.Drawing.Point(3, 3);
+            this.dgvBAccounts.MultiSelect = false;
             this.dgvBAccounts.Name = "dgvBAccounts";
             this.dgvBAccounts.ReadOnly = true;
             this.dgvBAccounts.RowTemplate.Height = 25;
+            this.dgvBAccounts.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvBAccounts.Size = new System.Drawing.Size(786, 380);
             this.dgvBAccounts.TabIndex = 0;
             // 
@@ -269,9 +273,11 @@
             this.dgvFAccounts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvFAccounts.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvFAccounts.Location = new System.Drawing.Point(3, 3);
+            this.dgvFAccounts.MultiSelect = false;
             this.dgvFAccounts.Name = "dgvFAccounts";
             this.dgvFAccounts.ReadOnly = true;
             this.dgvFAccounts.RowTemplate.Height = 25;
+            this.dgvFAccounts.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvFAccounts.Size = new System.Drawing.Size(786, 380);
             this.dgvFAccounts.TabIndex = 0;
             // 
@@ -346,9 +352,11 @@
             this.dgvExchangeRates.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvExchangeRates.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvExchangeRates.Location = new System.Drawing.Point(3, 3);
+            this.dgvExchangeRates.MultiSelect = false;
             this.dgvExchangeRates.Name = "dgvExchangeRates";
             this.dgvExchangeRates.ReadOnly = true;
             this.dgvExchangeRates.RowTemplate.Height = 25;
+            this.dgvExchangeRates.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvExchangeRates.Size = new System.Drawing.Size(786, 380);
             this.dgvExchangeRates.TabIndex = 0;
             // 
@@ -423,9 +431,11 @@
             this.dgvTransactions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvTransactions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvTransactions.Location = new System.Drawing.Point(3, 3);
+            this.dgvTransactions.MultiSelect = false;
             this.dgvTransactions.Name = "dgvTransactions";
             this.dgvTransactions.ReadOnly = true;
             this.dgvTransactions.RowTemplate.Height = 25;
+            this.dgvTransactions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvTransactions.Size = new System.Drawing.Size(786, 380);
             this.dgvTransactions.TabIndex = 0;
             // 

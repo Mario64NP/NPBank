@@ -26,7 +26,6 @@ namespace Forms
 
             _bankContext.Currencies.Load();
             cmbFrom.DataSource = _bankContext.Currencies.Local.ToObservableCollection();
-            cmbTo.DataSource = _bankContext.Currencies.Local.ToObservableCollection();
         }
 
         private void cmbFrom_SelectedIndexChanged(object sender, EventArgs e)
@@ -34,16 +33,17 @@ namespace Forms
             cmbTo.DataSource = OtherCurrencies((Currency)cmbFrom.SelectedItem);
         }
 
-        private void cmbTo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            cmbFrom.DataSource = OtherCurrencies((Currency)cmbTo.SelectedItem);
-        }
-
-        private object OtherCurrencies(Currency selectedItem)
+        private List<Currency> OtherCurrencies(Currency selectedItem)
         {
             List<Currency> currencies = _bankContext.Currencies.Local.ToList();
             currencies.Remove(selectedItem);
             return currencies;
+        }
+
+        internal void DisableCurrencyChanging()
+        {
+            cmbFrom.Enabled = false;
+            cmbTo.Enabled = false;
         }
     }
 }
