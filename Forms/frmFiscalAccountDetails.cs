@@ -15,7 +15,7 @@ namespace Forms
 {
     public partial class frmFiscalAccountDetails : Form
     {
-        private readonly BankContext _bankContext = new BankContext();
+        private readonly BankContext _bankContext = new();
 
         public string AccountNumber { get { return txtAccountNumber.Text; } set { txtAccountNumber.Text = value; } }
         public Currency Currency { get { return (Currency)cmbCurrency.SelectedItem; } set { cmbCurrency.SelectedItem = value; } }

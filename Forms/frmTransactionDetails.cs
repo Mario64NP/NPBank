@@ -15,7 +15,7 @@ namespace Forms
 {
     public partial class frmTransactionDetails : Form
     {
-        private readonly BankContext _bankContext = new BankContext();
+        private readonly BankContext _bankContext = new();
 
         public FiscalAccount FromAccount { get { return (FiscalAccount)cmbAccountFrom.SelectedItem; } set { cmbAccountFrom.SelectedItem = value; } }
         public FiscalAccount ToAccount { get { return (FiscalAccount)cmbAccountTo.SelectedItem; } set { cmbAccountTo.SelectedItem = value; } }

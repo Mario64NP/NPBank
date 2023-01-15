@@ -6,7 +6,7 @@ namespace Forms
 {
     public partial class frmMain : Form
     {
-        private readonly BankContext _bankContext = new BankContext();
+        private readonly BankContext _bankContext = new();
 
         public frmMain()
         {
@@ -74,7 +74,7 @@ namespace Forms
 
         private void btnClientAdd_Click(object sender, EventArgs e)
         {
-            frmClientDetails frm = new frmClientDetails();
+            frmClientDetails frm = new();
             frm.Text = "Add a client";
 
             if (frm.ShowDialog() == DialogResult.OK)
@@ -103,7 +103,7 @@ namespace Forms
 
         private void btnClientSearch_Click(object sender, EventArgs e)
         {
-            frmClientDetails frm = new frmClientDetails();
+            frmClientDetails frm = new();
             frm.Text = "Search clients";
 
             if (frm.ShowDialog() == DialogResult.OK)
@@ -115,7 +115,7 @@ namespace Forms
 
         private void btnClientEdit_Click(object sender, EventArgs e)
         {
-            frmClientDetails frm = new frmClientDetails();
+            frmClientDetails frm = new();
             frm.Text = "Edit a client";
 
             Client selectedClient = (Client)dgvClients.SelectedRows[0].DataBoundItem;
@@ -154,7 +154,7 @@ namespace Forms
 
         private void btnBAccountAdd_Click(object sender, EventArgs e)
         {
-            frmBankAccountDetails frm = new frmBankAccountDetails();
+            frmBankAccountDetails frm = new();
             frm.Text = "Add a bank account";
 
             if (frm.ShowDialog() == DialogResult.OK)
@@ -173,7 +173,7 @@ namespace Forms
 
         private void btnBAccountSearch_Click(object sender, EventArgs e)
         {
-            frmBankAccountDetails frm = new frmBankAccountDetails();
+            frmBankAccountDetails frm = new();
             frm.Text = "Search bank accounts";
 
             if (frm.ShowDialog() == DialogResult.OK)
@@ -184,7 +184,7 @@ namespace Forms
 
         private void btnBAccountEdit_Click(object sender, EventArgs e)
         {
-            frmBankAccountDetails frm = new frmBankAccountDetails();
+            frmBankAccountDetails frm = new();
             frm.Text = "Edit a bank account";
 
             BankAccount selectedBankAccount = (BankAccount)dgvBAccounts.SelectedRows[0].DataBoundItem;
@@ -211,7 +211,7 @@ namespace Forms
 
         private void btnFAccountAdd_Click(object sender, EventArgs e)
         {
-            frmFiscalAccountDetails frm = new frmFiscalAccountDetails();
+            frmFiscalAccountDetails frm = new();
             frm.Text = "Add a fiscal account";
 
             if (frm.ShowDialog() == DialogResult.OK)
@@ -232,7 +232,7 @@ namespace Forms
 
         private void btnFAccountSearch_Click(object sender, EventArgs e)
         {
-            frmFiscalAccountDetails frm = new frmFiscalAccountDetails();
+            frmFiscalAccountDetails frm = new();
             frm.Text = "Search fiscal accounts";
 
             if (frm.ShowDialog() == DialogResult.OK)
@@ -245,7 +245,7 @@ namespace Forms
 
         private void btnFAccountEdit_Click(object sender, EventArgs e)
         {
-            frmFiscalAccountDetails frm = new frmFiscalAccountDetails();
+            frmFiscalAccountDetails frm = new();
             frm.Text = "Edit a fiscal account";
 
             FiscalAccount selectedFiscalAccount = (FiscalAccount)dgvFAccounts.SelectedRows[0].DataBoundItem;
@@ -276,7 +276,7 @@ namespace Forms
 
         private void btnExchangeRateAdd_Click(object sender, EventArgs e)
         {
-            frmExchangeRateDetails frm = new frmExchangeRateDetails();
+            frmExchangeRateDetails frm = new();
             frm.Text = "Add a new exchange rate";
 
             if (frm.ShowDialog() == DialogResult.OK)
@@ -298,7 +298,7 @@ namespace Forms
 
         private void btnExchangeRateSearch_Click(object sender, EventArgs e)
         {
-            frmExchangeRateDetails frm = new frmExchangeRateDetails();
+            frmExchangeRateDetails frm = new();
             frm.Text = "Search exchange rates";
 
             if (frm.ShowDialog() == DialogResult.OK)
@@ -311,7 +311,7 @@ namespace Forms
 
         private void btnExchangeRateEdit_Click(object sender, EventArgs e)
         {
-            frmExchangeRateDetails frm = new frmExchangeRateDetails();
+            frmExchangeRateDetails frm = new();
             frm.Text = "Edit an exchange rate";
 
             ExchangeRate selectedExchange = (ExchangeRate)dgvExchangeRates.SelectedRows[0].DataBoundItem;
@@ -340,7 +340,7 @@ namespace Forms
 
         private void btnTransactionAdd_Click(object sender, EventArgs e)
         {
-            frmTransactionDetails frm = new frmTransactionDetails();
+            frmTransactionDetails frm = new();
             frm.Text = "Add a new transaction";
 
             if (frm.ShowDialog() == DialogResult.OK)
@@ -361,7 +361,7 @@ namespace Forms
 
         private void btnTransactionSearch_Click(object sender, EventArgs e)
         {
-            frmTransactionDetails frm = new frmTransactionDetails();
+            frmTransactionDetails frm = new();
             frm.Text = "Search transactions";
 
             if (frm.ShowDialog() == DialogResult.OK)
@@ -374,7 +374,7 @@ namespace Forms
 
         private void btnTransactionEdit_Click(object sender, EventArgs e)
         {
-            frmTransactionDetails frm = new frmTransactionDetails();
+            frmTransactionDetails frm = new();
             frm.Text = "Edit a transaction";
 
             Transaction selectedTransaction = (Transaction)dgvTransactions.SelectedRows[0].DataBoundItem;

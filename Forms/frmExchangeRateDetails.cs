@@ -15,7 +15,7 @@ namespace Forms
 {
     public partial class frmExchangeRateDetails : Form
     {
-        private readonly BankContext _bankContext = new BankContext();
+        private readonly BankContext _bankContext = new();
 
         public Currency FromCurrency { get { return (Currency)cmbFrom.SelectedItem; } set { cmbFrom.SelectedItem = value; } }
         public Currency ToCurrency { get { return (Currency)cmbTo.SelectedItem; } set { cmbTo.SelectedItem = value; } }
