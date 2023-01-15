@@ -76,6 +76,8 @@
             // 
             // cmbCurrency
             // 
+            this.cmbCurrency.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
+            this.cmbCurrency.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cmbCurrency.FormattingEnabled = true;
             this.cmbCurrency.Location = new System.Drawing.Point(170, 67);
             this.cmbCurrency.Name = "cmbCurrency";
@@ -120,6 +122,8 @@
             // 
             // cmbBAccount
             // 
+            this.cmbBAccount.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
+            this.cmbBAccount.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cmbBAccount.FormattingEnabled = true;
             this.cmbBAccount.Location = new System.Drawing.Point(170, 147);
             this.cmbBAccount.Name = "cmbBAccount";

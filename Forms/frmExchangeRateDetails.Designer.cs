@@ -67,6 +67,8 @@
             // 
             // cmbFrom
             // 
+            this.cmbFrom.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
+            this.cmbFrom.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cmbFrom.FormattingEnabled = true;
             this.cmbFrom.Location = new System.Drawing.Point(170, 27);
             this.cmbFrom.Name = "cmbFrom";
@@ -76,6 +78,8 @@
             // 
             // cmbTo
             // 
+            this.cmbTo.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
+            this.cmbTo.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cmbTo.FormattingEnabled = true;
             this.cmbTo.Location = new System.Drawing.Point(170, 67);
             this.cmbTo.Name = "cmbTo";

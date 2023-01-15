@@ -92,6 +92,8 @@
             // 
             // cmbAccountFrom
             // 
+            this.cmbAccountFrom.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
+            this.cmbAccountFrom.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cmbAccountFrom.FormattingEnabled = true;
             this.cmbAccountFrom.Location = new System.Drawing.Point(170, 27);
             this.cmbAccountFrom.Name = "cmbAccountFrom";
@@ -101,6 +103,8 @@
             // 
             // cmbAccountTo
             // 
+            this.cmbAccountTo.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
+            this.cmbAccountTo.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cmbAccountTo.FormattingEnabled = true;
             this.cmbAccountTo.Location = new System.Drawing.Point(170, 67);
             this.cmbAccountTo.Name = "cmbAccountTo";

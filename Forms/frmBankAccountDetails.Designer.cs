@@ -47,6 +47,8 @@
             // 
             // cmbOwner
             // 
+            this.cmbOwner.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
+            this.cmbOwner.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cmbOwner.FormattingEnabled = true;
             this.cmbOwner.Location = new System.Drawing.Point(170, 27);
             this.cmbOwner.Name = "cmbOwner";
