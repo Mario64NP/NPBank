@@ -22,6 +22,9 @@ namespace Forms
             RefreshAllDgvs();
         }
 
+        /// <summary>
+        /// Re-links the clients data grid view with the data source and formats the columns.
+        /// </summary>
         private void RefreshDgvClients()
         {
             dgvClients.DataSource = null;
@@ -32,6 +35,9 @@ namespace Forms
             dgvClients.Columns["BankAccount"].Visible = false;
         }
 
+        /// <summary>
+        /// Re-links the bank accounts data grid view with the data source and formats the columns.
+        /// </summary>
         private void RefreshDgvBAccounts()
         {
             dgvBAccounts.DataSource = null;
@@ -40,6 +46,9 @@ namespace Forms
             dgvBAccounts.Columns[0].Width = 30;
         }
 
+        /// <summary>
+        /// Re-links the fiscal accounts data grid view with the data source and formats the columns.
+        /// </summary>
         private void RefreshDgvFAccounts()
         {
             dgvFAccounts.DataSource = null;
@@ -50,6 +59,9 @@ namespace Forms
             dgvFAccounts.Columns[4].Width = 150;
         }
 
+        /// <summary>
+        /// Re-links the exchange rates data grid view with the data source and formats the columns.
+        /// </summary>
         private void RefreshDgvExchangeRates()
         {
             dgvExchangeRates.DataSource = null;
@@ -59,6 +71,9 @@ namespace Forms
             dgvExchangeRates.Columns["ToCurrencyID"].Visible   = false;
         }
 
+        /// <summary>
+        /// Re-links the transactions data grid view with the data source and formats the columns.
+        /// </summary>
         private void RefreshDgvTransactions()
         {
             dgvTransactions.DataSource = null;
@@ -68,6 +83,9 @@ namespace Forms
             dgvTransactions.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
         }
 
+        /// <summary>
+        /// Refreshes all data grid views.
+        /// </summary>
         private void RefreshAllDgvs()
         {
             RefreshDgvClients();
@@ -77,31 +95,61 @@ namespace Forms
             RefreshDgvTransactions();
         }
 
-        private static bool IsValidClient(Client client)
+        /// <summary>
+        /// Checks if all the properties of the client have valid values.
+        /// </summary>
+        /// <param name="c">The client</param>
+        /// <returns><c>true</c> if all the properties are valid; otherwise, <c>false</c></returns>
+        private static bool IsValidClient(Client c)
         {
-            return client is not null && !string.IsNullOrEmpty(client.Name) && !string.IsNullOrEmpty(client.Email) && !string.IsNullOrEmpty(client.PhoneNumber);
+            return c is not null && !string.IsNullOrEmpty(c.Name) && !string.IsNullOrEmpty(c.Email) && !string.IsNullOrEmpty(c.PhoneNumber);
         }
 
+        /// <summary>
+        /// Checks if all the properties of the bank account have valid values.
+        /// </summary>
+        /// <param name="b">The bank account</param>
+        /// <returns><c>true</c> if all the properties are valid; otherwise, <c>false</c></returns>
         private static bool IsValidBankAccount(BankAccount b)
         {
             return b is not null && b.DateCreated < DateTime.Now;
         }
 
+        /// <summary>
+        /// Checks if all the properties of the fiscal account have valid values.
+        /// </summary>
+        /// <param name="f">The fiscal account</param>
+        /// <returns><c>true</c> if all the properties are valid; otherwise, <c>false</c></returns>
         private static bool IsValidFiscalAccount(FiscalAccount f)
         {
             return f is not null && !string.IsNullOrEmpty(f.Number) && f.Number.Contains('-') && f.Balance >= 0;
         }
 
+        /// <summary>
+        /// Checks if all the properties of the exchange rate have valid values.
+        /// </summary>
+        /// <param name="er">The exchange rate</param>
+        /// <returns><c>true</c> if all the properties are valid; otherwise, <c>false</c></returns>
         private static bool IsValidExchangeRate(ExchangeRate er)
         {
             return er.Rate > 0;
         }
 
+        /// <summary>
+        /// Checks if all the properties of the transaction have valid values.
+        /// </summary>
+        /// <param name="t">The transaction</param>
+        /// <returns><c>true</c> if all the properties are valid; otherwise, <c>false</c></returns>
         private static bool IsValidTransaction(Transaction t)
         {
             return t is not null && t.FromAccount != t.ToAccount && t.Amount > 0 && t.Timestamp < DateTime.Now;
         }
 
+        /// <summary>
+        /// Executes the transaction. Decreases the balance of the source account by the amount of the transaction,
+        /// and increases the balance of the destination account by the amount of the transaction multiplied by the exchange rate.
+        /// </summary>
+        /// <param name="t">The transaction</param>
         private void ExecuteTransaction(Transaction t)
         {
             double rate = _bankContext.ExchangeRates.Single(r => r.FromCurrencyID == t.FromAccount.Currency.ID && r.ToCurrencyID == t.ToAccount.Currency.ID).Rate;
