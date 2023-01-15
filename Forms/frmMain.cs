@@ -19,11 +19,7 @@ namespace Forms
             _bankContext.ExchangeRates.Load();
             _bankContext.Transactions.Load();
 
-            RefreshDgvClients();
-            RefreshDgvBAccounts();
-            RefreshDgvFAccounts();
-            RefreshDgvExchangeRates();
-            RefreshDgvTransactions();
+            RefreshAllDgvs();
         }
 
         private void RefreshDgvClients()
@@ -72,6 +68,47 @@ namespace Forms
             dgvTransactions.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
         }
 
+        private void RefreshAllDgvs()
+        {
+            RefreshDgvClients();
+            RefreshDgvBAccounts();
+            RefreshDgvFAccounts();
+            RefreshDgvExchangeRates();
+            RefreshDgvTransactions();
+        }
+
+        private static bool IsValidClient(Client client)
+        {
+            return client is not null && !string.IsNullOrEmpty(client.Name) && !string.IsNullOrEmpty(client.Email) && !string.IsNullOrEmpty(client.PhoneNumber);
+        }
+
+        private static bool IsValidBankAccount(BankAccount b)
+        {
+            return b is not null && b.DateCreated < DateTime.Now;
+        }
+
+        private static bool IsValidFiscalAccount(FiscalAccount f)
+        {
+            return f is not null && !string.IsNullOrEmpty(f.Number) && f.Number.Contains('-') && f.Balance >= 0;
+        }
+
+        private static bool IsValidExchangeRate(ExchangeRate er)
+        {
+            return er.Rate > 0;
+        }
+
+        private static bool IsValidTransaction(Transaction t)
+        {
+            return t is not null && t.FromAccount != t.ToAccount && t.Amount > 0 && t.Timestamp < DateTime.Now;
+        }
+
+        private void ExecuteTransaction(Transaction t)
+        {
+            double rate = _bankContext.ExchangeRates.Single(r => r.FromCurrencyID == t.FromAccount.Currency.ID && r.ToCurrencyID == t.ToAccount.Currency.ID).Rate;
+            t.FromAccount.Balance -= t.Amount;
+            t.ToAccount.Balance   += t.Amount * rate;
+        }
+
         private void btnClientAdd_Click(object sender, EventArgs e)
         {
             frmClientDetails frm = new();
@@ -80,20 +117,32 @@ namespace Forms
             if (frm.ShowDialog() == DialogResult.OK)
             {
                 if (frm.LegalEntity)
-                    _bankContext.Add(new LegalEntity()
+                {
+                    LegalEntity le = new()
                     {
                         Name        = frm.ClientName,
                         PhoneNumber = frm.PhoneNumber,
                         Email       = frm.Email,
                         Owner       = frm.Owner
-                    });
+                    };
+                    if (IsValidClient(le))
+                        _bankContext.Add(le);
+                    else
+                        MessageBox.Show("The details you've entered aren't valid.", "Invalid details", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
                 else
-                    _bankContext.Add(new NaturalEntity()
+                {
+                    NaturalEntity ne = new()
                     {
                         Name        = frm.ClientName,
                         PhoneNumber = frm.PhoneNumber,
                         Email       = frm.Email
-                    });
+                    };
+                    if (IsValidClient(ne))
+                        _bankContext.Add(ne);
+                    else
+                        MessageBox.Show("The details you've entered aren't valid.", "Invalid details", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
 
                 _bankContext.SaveChanges();
 
@@ -124,23 +173,32 @@ namespace Forms
             frm.Email       = selectedClient.Email;
             frm.LegalEntity = selectedClient is LegalEntity;
 
-            if (selectedClient is LegalEntity)
-                frm.Owner = ((LegalEntity)selectedClient).Owner;
+            if (selectedClient is LegalEntity entity)
+                frm.Owner = entity.Owner;
 
             frm.DisableCmbType();
 
             if (frm.ShowDialog() == DialogResult.OK)
             {
-                selectedClient.Name        = frm.ClientName;
-                selectedClient.PhoneNumber = frm.PhoneNumber;
-                selectedClient.Email       = frm.Email;
+                if (IsValidClient(new NaturalEntity() { 
+                    Name        = frm.ClientName,
+                    PhoneNumber = frm.PhoneNumber, 
+                    Email       = frm.Email
+                }))
+                {
+                    selectedClient.Name        = frm.ClientName;
+                    selectedClient.PhoneNumber = frm.PhoneNumber;
+                    selectedClient.Email       = frm.Email;
                 
-                if (selectedClient is LegalEntity)
-                    ((LegalEntity)selectedClient).Owner = frm.Owner;
+                    if (selectedClient is LegalEntity lEntity)
+                        lEntity.Owner = frm.Owner;
                 
-                _bankContext.SaveChanges();
+                    _bankContext.SaveChanges();
 
-                RefreshDgvClients();
+                    RefreshDgvClients();
+                }
+                else
+                    MessageBox.Show("The details you've entered aren't valid.", "Invalid details", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -149,7 +207,7 @@ namespace Forms
             _bankContext.Remove((Client)dgvClients.SelectedRows[0].DataBoundItem);
             _bankContext.SaveChanges();
 
-            RefreshDgvClients();
+            RefreshAllDgvs();
         }
 
         private void btnBAccountAdd_Click(object sender, EventArgs e)
@@ -159,17 +217,28 @@ namespace Forms
 
             if (frm.ShowDialog() == DialogResult.OK)
             {
-                _bankContext.Add(new BankAccount()
+                BankAccount b = new();
+                try
                 {
-                    Owner       = _bankContext.Clients.Single(c => c.ID == frm.Owner.ID),
-                    DateCreated = frm.DateCreated
-                });
+                    b.Owner       = _bankContext.Clients.Single(c => c.ID == frm.Owner.ID);
+                    b.DateCreated = frm.DateCreated;
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("The details you've entered aren't valid.", "Invalid details", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
-                _bankContext.SaveChanges();
+                if (IsValidBankAccount(b))
+                {
+                    _bankContext.Add(b);
+                    _bankContext.SaveChanges();
 
-                RefreshDgvBAccounts();
+                    RefreshDgvBAccounts();
+                }
             }
         }
+
 
         private void btnBAccountSearch_Click(object sender, EventArgs e)
         {
@@ -193,11 +262,29 @@ namespace Forms
 
             if (frm.ShowDialog() == DialogResult.OK)
             {
-                selectedBankAccount.Owner       = _bankContext.Clients.Local.Single(c => c.ID == frm.Owner.ID);
-                selectedBankAccount.DateCreated = frm.DateCreated;
-                _bankContext.SaveChanges();
+                BankAccount b = new();
+                try
+                {
+                    b.Owner       = _bankContext.Clients.Local.Single(c => c.ID == frm.Owner.ID);
+                    b.DateCreated = frm.DateCreated;
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("The details you've entered aren't valid.", "Invalid details", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
-                RefreshDgvBAccounts();
+                if (IsValidBankAccount(b))
+                {
+                    selectedBankAccount.Owner       = b.Owner;
+                    selectedBankAccount.DateCreated = b.DateCreated;
+
+                    _bankContext.SaveChanges();
+
+                    RefreshDgvBAccounts();
+                }
+                else
+                    MessageBox.Show("The details you've entered aren't valid.", "Invalid details", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -206,7 +293,7 @@ namespace Forms
             _bankContext.Remove((BankAccount)dgvBAccounts.SelectedRows[0].DataBoundItem);
             _bankContext.SaveChanges();
 
-            RefreshDgvBAccounts();
+            RefreshAllDgvs();
         }
 
         private void btnFAccountAdd_Click(object sender, EventArgs e)
@@ -216,17 +303,28 @@ namespace Forms
 
             if (frm.ShowDialog() == DialogResult.OK)
             {
-                _bankContext.Add(new FiscalAccount()
+                FiscalAccount f = new();
+
+                try
                 {
-                    Number      = frm.AccountNumber,
-                    Currency    = _bankContext.Currencies.Single(c => c.ID == frm.Currency.ID),
-                    Balance     = frm.Balance,
-                    BankAccount = _bankContext.BankAccounts.Single(b => b.ID == frm.BankAccount.ID),
-                });
+                    f.Number      = frm.AccountNumber;
+                    f.Balance     = frm.Balance;
+                    f.Currency    = _bankContext.Currencies.Single(c => c.ID == frm.Currency.ID);
+                    f.BankAccount = _bankContext.BankAccounts.Single(b => b.ID == frm.BankAccount.ID);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("The details you've entered aren't valid.", "Invalid details", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
-                _bankContext.SaveChanges();
+                if (IsValidFiscalAccount(f))
+                {
+                    _bankContext.Add(f);
+                    _bankContext.SaveChanges();
 
-                RefreshDgvFAccounts();
+                    RefreshDgvFAccounts();
+                }
             }
         }
 
@@ -256,13 +354,33 @@ namespace Forms
 
             if (frm.ShowDialog() == DialogResult.OK)
             {
-                selectedFiscalAccount.Number      = frm.AccountNumber;
-                selectedFiscalAccount.Currency    = _bankContext.Currencies.Local.Single(c => c.ID == frm.Currency.ID);
-                selectedFiscalAccount.Balance     = frm.Balance;
-                selectedFiscalAccount.BankAccount = _bankContext.BankAccounts.Local.Single(b => b.ID == frm.BankAccount.ID);
-                _bankContext.SaveChanges();
+                FiscalAccount f = new();
+                try
+                {
+                    f.Number      = frm.AccountNumber;
+                    f.Balance     = frm.Balance;
+                    f.Currency    = _bankContext.Currencies.Local.Single(c => c.ID == frm.Currency.ID);
+                    f.BankAccount = _bankContext.BankAccounts.Local.Single(b => b.ID == frm.BankAccount.ID);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("The details you've entered aren't valid.", "Invalid details", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
-                RefreshDgvFAccounts();
+                if (IsValidFiscalAccount(f))
+                {
+                    selectedFiscalAccount.Number      = f.Number;
+                    selectedFiscalAccount.Currency    = f.Currency;
+                    selectedFiscalAccount.Balance     = f.Balance;
+                    selectedFiscalAccount.BankAccount = f.BankAccount;
+
+                    _bankContext.SaveChanges();
+                
+                    RefreshDgvFAccounts();
+                }
+                else
+                    MessageBox.Show("The details you've entered aren't valid.", "Invalid details", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -271,7 +389,7 @@ namespace Forms
             _bankContext.Remove((FiscalAccount)dgvFAccounts.SelectedRows[0].DataBoundItem);
             _bankContext.SaveChanges();
 
-            RefreshDgvFAccounts();
+            RefreshAllDgvs();
         }
 
         private void btnExchangeRateAdd_Click(object sender, EventArgs e)
@@ -281,18 +399,28 @@ namespace Forms
 
             if (frm.ShowDialog() == DialogResult.OK)
             {
-                _bankContext.Add(new ExchangeRate()
+                ExchangeRate er = new();
+                try
                 {
-                    FromCurrency   = _bankContext.Currencies.Single(c => c.ID == frm.FromCurrency.ID),
-                    FromCurrencyID = frm.FromCurrency.ID,
-                    ToCurrency     = _bankContext.Currencies.Single(c => c.ID == frm.ToCurrency.ID),
-                    ToCurrencyID   = frm.ToCurrency.ID,
-                    Rate           = frm.Rate
-                });
-                
-                _bankContext.SaveChanges();
+                    er.FromCurrency   = _bankContext.Currencies.Single(c => c.ID == frm.FromCurrency.ID);
+                    er.ToCurrency     = _bankContext.Currencies.Single(c => c.ID == frm.ToCurrency.ID);
+                    er.FromCurrencyID = frm.FromCurrency.ID;
+                    er.ToCurrencyID   = frm.ToCurrency.ID;
+                    er.Rate           = frm.Rate;
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("The details you've entered aren't valid.", "Invalid details", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
-                RefreshDgvExchangeRates();
+                if (IsValidExchangeRate(er))
+                {
+                    _bankContext.Add(er);
+                    _bankContext.SaveChanges();
+
+                    RefreshDgvExchangeRates();
+                }
             }
         }
 
@@ -323,10 +451,28 @@ namespace Forms
 
             if (frm.ShowDialog() == DialogResult.OK)
             {
-                selectedExchange.Rate           = frm.Rate;
-                _bankContext.SaveChanges();
+                ExchangeRate er = new();
+                try
+                {
+                    er.FromCurrency   = _bankContext.Currencies.Single(c => c.ID == frm.FromCurrency.ID);
+                    er.ToCurrency     = _bankContext.Currencies.Single(c => c.ID == frm.ToCurrency.ID);
+                    er.FromCurrencyID = frm.FromCurrency.ID;
+                    er.ToCurrencyID   = frm.ToCurrency.ID;
+                    er.Rate           = frm.Rate;
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("The details you've entered aren't valid.", "Invalid details", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
-                RefreshDgvExchangeRates();
+                if (IsValidExchangeRate(er))
+                {
+                    selectedExchange.Rate = frm.Rate;
+                    _bankContext.SaveChanges();
+
+                    RefreshDgvExchangeRates();
+                }
             }
         }
 
@@ -345,17 +491,29 @@ namespace Forms
 
             if (frm.ShowDialog() == DialogResult.OK)
             {
-                _bankContext.Add(new Transaction()
+                Transaction t = new();
+                try
                 {
-                    FromAccount = _bankContext.FiscalAccounts.Single(a => a.ID == frm.FromAccount.ID),
-                    ToAccount   = _bankContext.FiscalAccounts.Single(a => a.ID == frm.ToAccount.ID),
-                    Amount      = frm.Amount,
-                    Timestamp   = frm.Timestamp
-                });
-            
-                _bankContext.SaveChanges();
+                    t.FromAccount = _bankContext.FiscalAccounts.Single(a => a.ID == frm.FromAccount.ID);
+                    t.ToAccount   = _bankContext.FiscalAccounts.Single(a => a.ID == frm.ToAccount.ID);
+                    t.Amount      = frm.Amount;
+                    t.Timestamp   = frm.Timestamp;
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("The details you've entered aren't valid.", "Invalid details", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
-                RefreshDgvTransactions();
+                if (IsValidTransaction(t))
+                {
+                    _bankContext.Add(t);
+                    _bankContext.SaveChanges();
+
+                    ExecuteTransaction(t);
+
+                    RefreshDgvTransactions();
+                }
             }
         }
 
