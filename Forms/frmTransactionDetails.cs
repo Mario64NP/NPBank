@@ -1,15 +1,6 @@
 ﻿using DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Model;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Forms
 {
@@ -34,10 +25,15 @@ namespace Forms
             cmbAccountTo.DataSource = OtherAccounts((FiscalAccount)cmbAccountFrom.SelectedItem);
         }
 
-        private List<FiscalAccount> OtherAccounts(FiscalAccount selectedItem)
+        /// <summary>
+        /// Provides a list of all fiscal accounts except the one specified
+        /// </summary>
+        /// <param name="accountToRemove">The fiscal account you want to exclude</param>
+        /// <returns>A list of fiscal accounts excluding the one sepcified</returns>
+        private List<FiscalAccount> OtherAccounts(FiscalAccount accountToRemove)
         {
             List<FiscalAccount> accounts = _bankContext.FiscalAccounts.Local.ToList();
-            accounts.Remove(selectedItem); 
+            accounts.Remove(accountToRemove); 
             return accounts;
         }
     }

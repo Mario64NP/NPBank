@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -36,6 +37,8 @@
             this.txtRate = new System.Windows.Forms.TextBox();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.btnGetOnline = new System.Windows.Forms.Button();
+            this.ttGetOnline = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // label1
@@ -113,6 +116,26 @@
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
+            // btnGetOnline
+            // 
+            this.btnGetOnline.Location = new System.Drawing.Point(123, 150);
+            this.btnGetOnline.Name = "btnGetOnline";
+            this.btnGetOnline.Size = new System.Drawing.Size(75, 23);
+            this.btnGetOnline.TabIndex = 8;
+            this.btnGetOnline.Text = "Get online";
+            this.ttGetOnline.SetToolTip(this.btnGetOnline, "Get the exchange rate online");
+            this.btnGetOnline.UseVisualStyleBackColor = true;
+            this.btnGetOnline.Click += new System.EventHandler(this.btnGetOnline_Click);
+            // 
+            // ttGetOnline
+            // 
+            this.ttGetOnline.AutoPopDelay = 5000;
+            this.ttGetOnline.InitialDelay = 3000;
+            this.ttGetOnline.IsBalloon = true;
+            this.ttGetOnline.ReshowDelay = 100;
+            this.ttGetOnline.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.ttGetOnline.ToolTipTitle = "Get online";
+            // 
             // frmExchangeRateDetails
             // 
             this.AcceptButton = this.btnOK;
@@ -120,6 +143,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(324, 196);
+            this.Controls.Add(this.btnGetOnline);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.txtRate);
@@ -146,5 +170,7 @@
         private TextBox txtRate;
         private Button btnOK;
         private Button btnCancel;
+        private Button btnGetOnline;
+        private ToolTip ttGetOnline;
     }
 }
