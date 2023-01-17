@@ -26,6 +26,16 @@
         /// </summary>
         public BankAccount BankAccount { get; set; }
 
+        /// <summary>
+        /// Checks if all the properties of the client have valid values.
+        /// </summary>
+        /// <param name="c">The client</param>
+        /// <returns><c>true</c> if all the properties are valid; otherwise, <c>false</c></returns>
+        public static bool IsValidClient(Client c)
+        {
+            return c is not null && !string.IsNullOrEmpty(c.Name) && !string.IsNullOrEmpty(c.Email) && !string.IsNullOrEmpty(c.PhoneNumber);
+        }
+
         public override string ToString()
         {
             return Name;

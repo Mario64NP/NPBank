@@ -26,6 +26,16 @@ namespace Model
         /// </summary>
         public List<FiscalAccount> FiscalAccounts { get; set; }
 
+        /// <summary>
+        /// Checks if all the properties of the bank account have valid values.
+        /// </summary>
+        /// <param name="b">The bank account</param>
+        /// <returns><c>true</c> if all the properties are valid; otherwise, <c>false</c></returns>
+        public static bool IsValidBankAccount(BankAccount b)
+        {
+            return b is not null && b.DateCreated < DateTime.Now;
+        }
+
         public override string ToString()
         {
             return Owner.Name + $"'s account (ID: {ID})";

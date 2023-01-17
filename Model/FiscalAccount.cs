@@ -26,6 +26,16 @@
         /// </summary>
         public BankAccount BankAccount { get; set; }
 
+        /// <summary>
+        /// Checks if all the properties of the fiscal account have valid values.
+        /// </summary>
+        /// <param name="f">The fiscal account</param>
+        /// <returns><c>true</c> if all the properties are valid; otherwise, <c>false</c></returns>
+        public static bool IsValidFiscalAccount(FiscalAccount f)
+        {
+            return f is not null && !string.IsNullOrEmpty(f.Number) && f.Number.Contains('-') && f.Balance >= 0;
+        }
+
         public override string ToString()
         {
             return Number;

@@ -96,56 +96,6 @@ namespace Forms
         }
 
         /// <summary>
-        /// Checks if all the properties of the client have valid values.
-        /// </summary>
-        /// <param name="c">The client</param>
-        /// <returns><c>true</c> if all the properties are valid; otherwise, <c>false</c></returns>
-        private static bool IsValidClient(Client c)
-        {
-            return c is not null && !string.IsNullOrEmpty(c.Name) && !string.IsNullOrEmpty(c.Email) && !string.IsNullOrEmpty(c.PhoneNumber);
-        }
-
-        /// <summary>
-        /// Checks if all the properties of the bank account have valid values.
-        /// </summary>
-        /// <param name="b">The bank account</param>
-        /// <returns><c>true</c> if all the properties are valid; otherwise, <c>false</c></returns>
-        private static bool IsValidBankAccount(BankAccount b)
-        {
-            return b is not null && b.DateCreated < DateTime.Now;
-        }
-
-        /// <summary>
-        /// Checks if all the properties of the fiscal account have valid values.
-        /// </summary>
-        /// <param name="f">The fiscal account</param>
-        /// <returns><c>true</c> if all the properties are valid; otherwise, <c>false</c></returns>
-        private static bool IsValidFiscalAccount(FiscalAccount f)
-        {
-            return f is not null && !string.IsNullOrEmpty(f.Number) && f.Number.Contains('-') && f.Balance >= 0;
-        }
-
-        /// <summary>
-        /// Checks if all the properties of the exchange rate have valid values.
-        /// </summary>
-        /// <param name="er">The exchange rate</param>
-        /// <returns><c>true</c> if all the properties are valid; otherwise, <c>false</c></returns>
-        private static bool IsValidExchangeRate(ExchangeRate er)
-        {
-            return er.Rate > 0;
-        }
-
-        /// <summary>
-        /// Checks if all the properties of the transaction have valid values.
-        /// </summary>
-        /// <param name="t">The transaction</param>
-        /// <returns><c>true</c> if all the properties are valid; otherwise, <c>false</c></returns>
-        private static bool IsValidTransaction(Transaction t)
-        {
-            return t is not null && t.FromAccount != t.ToAccount && t.Amount > 0 && t.Timestamp < DateTime.Now;
-        }
-
-        /// <summary>
         /// Executes the transaction. Decreases the balance of the source account by the amount of the transaction,
         /// and increases the balance of the destination account by the amount of the transaction multiplied by the exchange rate.
         /// </summary>
@@ -155,6 +105,7 @@ namespace Forms
             double rate = _bankContext.ExchangeRates.Single(r => r.FromCurrencyID == t.FromAccount.Currency.ID && r.ToCurrencyID == t.ToAccount.Currency.ID).Rate;
             t.FromAccount.Balance -= t.Amount;
             t.ToAccount.Balance   += t.Amount * rate;
+            _bankContext.SaveChanges();
         }
 
         private void btnClientAdd_Click(object sender, EventArgs e)
@@ -173,7 +124,7 @@ namespace Forms
                         Email       = frm.Email,
                         Owner       = frm.Owner
                     };
-                    if (IsValidClient(le))
+                    if (Client.IsValidClient(le))
                         _bankContext.Add(le);
                     else
                         MessageBox.Show("The details you've entered aren't valid.", "Invalid details", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -186,7 +137,7 @@ namespace Forms
                         PhoneNumber = frm.PhoneNumber,
                         Email       = frm.Email
                     };
-                    if (IsValidClient(ne))
+                    if (Client.IsValidClient(ne))
                         _bankContext.Add(ne);
                     else
                         MessageBox.Show("The details you've entered aren't valid.", "Invalid details", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -228,7 +179,7 @@ namespace Forms
 
             if (frm.ShowDialog() == DialogResult.OK)
             {
-                if (IsValidClient(new NaturalEntity() { 
+                if (Client.IsValidClient(new NaturalEntity() { 
                     Name        = frm.ClientName,
                     PhoneNumber = frm.PhoneNumber, 
                     Email       = frm.Email
@@ -277,7 +228,7 @@ namespace Forms
                     return;
                 }
 
-                if (IsValidBankAccount(b))
+                if (BankAccount.IsValidBankAccount(b))
                 {
                     _bankContext.Add(b);
                     _bankContext.SaveChanges();
@@ -286,7 +237,6 @@ namespace Forms
                 }
             }
         }
-
 
         private void btnBAccountSearch_Click(object sender, EventArgs e)
         {
@@ -322,7 +272,7 @@ namespace Forms
                     return;
                 }
 
-                if (IsValidBankAccount(b))
+                if (BankAccount.IsValidBankAccount(b))
                 {
                     selectedBankAccount.Owner       = b.Owner;
                     selectedBankAccount.DateCreated = b.DateCreated;
@@ -366,7 +316,7 @@ namespace Forms
                     return;
                 }
 
-                if (IsValidFiscalAccount(f))
+                if (FiscalAccount.IsValidFiscalAccount(f))
                 {
                     _bankContext.Add(f);
                     _bankContext.SaveChanges();
@@ -416,7 +366,7 @@ namespace Forms
                     return;
                 }
 
-                if (IsValidFiscalAccount(f))
+                if (FiscalAccount.IsValidFiscalAccount(f))
                 {
                     selectedFiscalAccount.Number      = f.Number;
                     selectedFiscalAccount.Currency    = f.Currency;
@@ -462,7 +412,7 @@ namespace Forms
                     return;
                 }
 
-                if (IsValidExchangeRate(er))
+                if (ExchangeRate.IsValidExchangeRate(er))
                 {
                     _bankContext.Add(er);
                     _bankContext.SaveChanges();
@@ -514,7 +464,7 @@ namespace Forms
                     return;
                 }
 
-                if (IsValidExchangeRate(er))
+                if (ExchangeRate.IsValidExchangeRate(er))
                 {
                     selectedExchange.Rate = frm.Rate;
                     _bankContext.SaveChanges();
@@ -553,7 +503,7 @@ namespace Forms
                     return;
                 }
 
-                if (IsValidTransaction(t))
+                if (Transaction.IsValidTransaction(t))
                 {
                     _bankContext.Add(t);
                     _bankContext.SaveChanges();

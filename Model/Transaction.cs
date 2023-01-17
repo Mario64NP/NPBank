@@ -25,5 +25,15 @@
         /// Gets or sets the time and date when the transaction occured.
         /// </summary>
         public DateTime Timestamp { get; set; }
+
+        /// <summary>
+        /// Checks if all the properties of the transaction have valid values.
+        /// </summary>
+        /// <param name="t">The transaction</param>
+        /// <returns><c>true</c> if all the properties are valid; otherwise, <c>false</c></returns>
+        public static bool IsValidTransaction(Transaction t)
+        {
+            return t is not null && !t.FromAccount.Equals(t.ToAccount) && t.Amount > 0 && t.Timestamp < DateTime.Now;
+        }
     }
 }
