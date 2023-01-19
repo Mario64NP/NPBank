@@ -1,7 +1,7 @@
-﻿using DatabaseContext;
+﻿using Controller;
+using DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Model;
-using System.Text.Json;
 
 namespace Forms
 {
@@ -47,28 +47,12 @@ namespace Forms
         {
             try
             {
-                txtRate.Text = GetRateOnline(txtRate.Text).ToString();
+                txtRate.Text = Coordinator.GetRateOnline(txtRate.Text, ((Currency)(cmbFrom.SelectedItem)).Code, ((Currency)(cmbTo.SelectedItem)).Code).ToString();
             }
             catch (Exception exc)
             {
                 txtRate.Text = exc.Message;
             }
-        }
-
-        /// <summary>
-        /// Gets the current exchange rate for the selected currencies online
-        /// </summary>
-        /// <param name="apiKey">Your API key for <see href="https://apilayer.com">apilayer.com</see></param>
-        /// <returns>The current exchange rate</returns>
-        private double GetRateOnline(string apiKey)
-        {
-            using HttpClient httpClient = new();
-            httpClient.DefaultRequestHeaders.Add("apikey", apiKey);
-            string response = httpClient.GetStringAsync($"https://api.apilayer.com/exchangerates_data/convert?to={((Currency)(cmbTo.SelectedItem)).Code}&from={((Currency)(cmbFrom.SelectedItem)).Code}&amount=1").Result;
-
-            using JsonDocument document = JsonDocument.Parse(response);
-            JsonElement rootElement = document.RootElement;
-            return rootElement.GetProperty("result").GetDouble();
         }
     }
 }

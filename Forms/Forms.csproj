@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Controller\Controller.csproj" />
     <ProjectReference Include="..\DatabaseContext\DatabaseContext.csproj" />
   </ItemGroup>
 
