@@ -55,5 +55,95 @@ namespace Controller
             JsonElement rootElement = document.RootElement;
             return rootElement.GetProperty("result").GetDouble();
         }
+
+        public int AddClient(Client cl)
+        {
+            BankContext.Add(cl);
+            return BankContext.SaveChanges();
+        }
+
+        public int RemoveClient(Client cl)
+        {
+            BankContext.Remove(cl);
+            return BankContext.SaveChanges();
+        }
+
+        public List<Client> GetAllClients()
+        {
+            return BankContext.Clients.Local.ToList();
+        }
+
+        public int AddBAccount(BankAccount b)
+        {
+            BankContext.Add(b);
+            return BankContext.SaveChanges();
+        }
+
+        public int RemoveBAccount(BankAccount b)
+        {
+            BankContext.Remove(b);
+            return BankContext.SaveChanges();
+        }
+
+        public List<BankAccount> GetAllBAccounts()
+        {
+            return BankContext.BankAccounts.Local.ToList();
+        }
+
+        public int AddFAccount(FiscalAccount f)
+        {
+            BankContext.Add(f);
+            return BankContext.SaveChanges();
+        }
+
+        public int RemoveFAccount(FiscalAccount f)
+        {
+            BankContext.Remove(f);
+            return BankContext.SaveChanges();
+        }
+
+        public List<FiscalAccount> GetAllFAccounts()
+        {
+            return BankContext.FiscalAccounts.Local.ToList();
+        }
+
+        public int AddExchangeRate(ExchangeRate e)
+        {
+            BankContext.Add(e);
+            return BankContext.SaveChanges();
+        }
+
+        public int RemoveExchangeRate(ExchangeRate e) 
+        {
+            BankContext.Remove(e);
+            return BankContext.SaveChanges();
+        }
+
+        public List<ExchangeRate> GetAllExchangeRates()
+        {
+            return BankContext.ExchangeRates.Local.ToList();
+        }
+
+        public int AddTransaction(Transaction t)
+        {
+            BankContext.Add(t);
+            return BankContext.SaveChanges();
+        }
+
+        public int RemoveTransaction(Transaction t)
+        {
+            BankContext.Remove(t);
+            return BankContext.SaveChanges();
+        }
+
+        public List<Transaction> GetAllTransactions()
+        {
+            return BankContext.Transactions.Local.ToList();
+        }
+
+        public List<Currency> GetAllCurrencies() 
+        {
+            return BankContext.Currencies.Local.ToList();
+        }
     }
 }

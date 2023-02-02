@@ -104,7 +104,7 @@ namespace Forms
                         Owner       = frm.Owner
                     };
                     if (Client.IsValidClient(le))
-                        _coordinator.BankContext.Add(le);
+                        _coordinator.AddClient(le); //_coordinator.BankContext.Add(le);
                     else
                         MessageBox.Show("The details you've entered aren't valid.", "Invalid details", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
@@ -117,12 +117,12 @@ namespace Forms
                         Email       = frm.Email
                     };
                     if (Client.IsValidClient(ne))
-                        _coordinator.BankContext.Add(ne);
+                        _coordinator.AddClient(ne);
                     else
                         MessageBox.Show("The details you've entered aren't valid.", "Invalid details", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
-                _coordinator.BankContext.SaveChanges();
+                //_coordinator.BankContext.SaveChanges();
 
                 RefreshDgvClients();
             }
@@ -134,7 +134,7 @@ namespace Forms
             frm.Text = "Search clients";
 
             if (frm.ShowDialog() == DialogResult.OK)
-                dgvClients.DataSource = _coordinator.BankContext.Clients.Local.Where(x => 
+                dgvClients.DataSource = _coordinator.GetAllClients().Where(x =>
                 x.Name == (string.IsNullOrEmpty(frm.ClientName) ? x.Name : frm.ClientName) && 
                 x.PhoneNumber == (string.IsNullOrEmpty(frm.PhoneNumber) ? x.PhoneNumber : frm.PhoneNumber) &&
                 x.Email == (string.IsNullOrEmpty(frm.Email) ? x.Email : frm.Email)).ToList();
@@ -189,8 +189,8 @@ namespace Forms
             if (dgvClients.SelectedRows.Count == 0)
                 return;
 
-            _coordinator.BankContext.Remove((Client)dgvClients.SelectedRows[0].DataBoundItem);
-            _coordinator.BankContext.SaveChanges();
+            _coordinator.RemoveClient((Client)dgvClients.SelectedRows[0].DataBoundItem);
+            //_coordinator.BankContext.SaveChanges();
 
             RefreshAllDgvs();
         }
@@ -205,7 +205,7 @@ namespace Forms
                 BankAccount b = new();
                 try
                 {
-                    b.Owner       = _coordinator.BankContext.Clients.Single(c => c.Equals(frm.Owner));
+                    b.Owner       = _coordinator.GetAllClients().Single(c => c.Equals(frm.Owner));
                     b.DateCreated = frm.DateCreated;
                 }
                 catch (Exception)
@@ -216,8 +216,8 @@ namespace Forms
 
                 if (BankAccount.IsValidBankAccount(b))
                 {
-                    _coordinator.BankContext.Add(b);
-                    _coordinator.BankContext.SaveChanges();
+                    _coordinator.AddBAccount(b);
+                    //_coordinator.BankContext.SaveChanges();
 
                     RefreshDgvBAccounts();
                 }
@@ -230,9 +230,9 @@ namespace Forms
             frm.Text = "Search bank accounts";
 
             if (frm.ShowDialog() == DialogResult.OK)
-                dgvBAccounts.DataSource = _coordinator.BankContext.BankAccounts.Local.Where(b => b.Owner.Equals(frm.Owner)).ToList();
+                dgvBAccounts.DataSource = _coordinator.GetAllBAccounts().Where(b => b.Owner.Equals(frm.Owner)).ToList();
             else
-                dgvBAccounts.DataSource = _coordinator.BankContext.BankAccounts.Local.ToObservableCollection();
+                dgvBAccounts.DataSource = _coordinator.GetAllBAccounts(); //.ToObservableCollection();
         }
 
         private void btnBAccountEdit_Click(object sender, EventArgs e)
@@ -253,7 +253,7 @@ namespace Forms
                 BankAccount b = new();
                 try
                 {
-                    b.Owner       = _coordinator.BankContext.Clients.Local.Single(c => c.Equals(frm.Owner));
+                    b.Owner       = _coordinator.GetAllClients().Single(c => c.Equals(frm.Owner));
                     b.DateCreated = frm.DateCreated;
                 }
                 catch (Exception)
@@ -267,7 +267,7 @@ namespace Forms
                     selectedBankAccount.Owner       = b.Owner;
                     selectedBankAccount.DateCreated = b.DateCreated;
 
-                    _coordinator.BankContext.SaveChanges();
+                    //_coordinator.BankContext.SaveChanges();
 
                     RefreshDgvBAccounts();
                 }
@@ -281,8 +281,8 @@ namespace Forms
             if (dgvBAccounts.SelectedRows.Count == 0)
                 return;
 
-            _coordinator.BankContext.Remove((BankAccount)dgvBAccounts.SelectedRows[0].DataBoundItem);
-            _coordinator.BankContext.SaveChanges();
+            _coordinator.RemoveBAccount((BankAccount)dgvBAccounts.SelectedRows[0].DataBoundItem);
+            //_coordinator.BankContext.SaveChanges();
 
             RefreshAllDgvs();
         }
@@ -300,8 +300,8 @@ namespace Forms
                 {
                     f.Number      = frm.AccountNumber;
                     f.Balance     = frm.Balance;
-                    f.Currency    = _coordinator.BankContext.Currencies.Single(c => c.Equals(frm.Currency));
-                    f.BankAccount = _coordinator.BankContext.BankAccounts.Single(b => b.Equals(frm.BankAccount));
+                    f.Currency    = _coordinator.GetAllCurrencies().Single(c => c.Equals(frm.Currency));
+                    f.BankAccount = _coordinator.GetAllBAccounts().Single(b => b.Equals(frm.BankAccount));
                 }
                 catch (Exception)
                 {
@@ -311,8 +311,8 @@ namespace Forms
 
                 if (FiscalAccount.IsValidFiscalAccount(f))
                 {
-                    _coordinator.BankContext.Add(f);
-                    _coordinator.BankContext.SaveChanges();
+                    _coordinator.AddFAccount(f);
+                    //_coordinator.BankContext.SaveChanges();
 
                     RefreshDgvFAccounts();
                 }
@@ -325,11 +325,11 @@ namespace Forms
             frm.Text = "Search fiscal accounts";
 
             if (frm.ShowDialog() == DialogResult.OK)
-                dgvFAccounts.DataSource = _coordinator.BankContext.FiscalAccounts.Local.Where(f => 
+                dgvFAccounts.DataSource = _coordinator.GetAllFAccounts().Where(f =>
                 f.Number == (string.IsNullOrEmpty(frm.AccountNumber) ? f.Number : frm.AccountNumber) &&
                 f.BankAccount.Equals(frm.BankAccount)).ToList();
             else
-                dgvFAccounts.DataSource = _coordinator.BankContext.FiscalAccounts.Local.ToObservableCollection();
+                dgvFAccounts.DataSource = _coordinator.GetAllFAccounts(); //.ToObservableCollection();
         }
 
         private void btnFAccountEdit_Click(object sender, EventArgs e)
@@ -354,8 +354,8 @@ namespace Forms
                 {
                     f.Number      = frm.AccountNumber;
                     f.Balance     = frm.Balance;
-                    f.Currency    = _coordinator.BankContext.Currencies.Local.Single(c => c.Equals(frm.Currency));
-                    f.BankAccount = _coordinator.BankContext.BankAccounts.Local.Single(b => b.Equals(frm.BankAccount));
+                    f.Currency    = _coordinator.GetAllCurrencies().Single(c => c.Equals(frm.Currency));
+                    f.BankAccount = _coordinator.GetAllBAccounts().Single(b => b.Equals(frm.BankAccount));
                 }
                 catch (Exception)
                 {
@@ -384,8 +384,8 @@ namespace Forms
             if (dgvFAccounts.SelectedRows.Count == 0)
                 return;
 
-            _coordinator.BankContext.Remove((FiscalAccount)dgvFAccounts.SelectedRows[0].DataBoundItem);
-            _coordinator.BankContext.SaveChanges();
+            _coordinator.RemoveFAccount((FiscalAccount)dgvFAccounts.SelectedRows[0].DataBoundItem);
+            //_coordinator.BankContext.SaveChanges();
 
             RefreshAllDgvs();
         }
@@ -400,8 +400,8 @@ namespace Forms
                 ExchangeRate er = new();
                 try
                 {
-                    er.FromCurrency   = _coordinator.BankContext.Currencies.Single(c => c.Equals(frm.FromCurrency));
-                    er.ToCurrency     = _coordinator.BankContext.Currencies.Single(c => c.Equals(frm.ToCurrency));
+                    er.FromCurrency   = _coordinator.GetAllCurrencies().Single(c => c.Equals(frm.FromCurrency));
+                    er.ToCurrency     = _coordinator.GetAllCurrencies().Single(c => c.Equals(frm.ToCurrency));
                     er.FromCurrencyID = frm.FromCurrency.ID;
                     er.ToCurrencyID   = frm.ToCurrency.ID;
                     er.Rate           = frm.Rate;
@@ -414,8 +414,8 @@ namespace Forms
 
                 if (ExchangeRate.IsValidExchangeRate(er))
                 {
-                    _coordinator.BankContext.Add(er);
-                    _coordinator.BankContext.SaveChanges();
+                    _coordinator.AddExchangeRate(er);
+                    //_coordinator.BankContext.SaveChanges();
 
                     RefreshDgvExchangeRates();
                 }
@@ -428,11 +428,11 @@ namespace Forms
             frm.Text = "Search exchange rates";
 
             if (frm.ShowDialog() == DialogResult.OK)
-                dgvExchangeRates.DataSource = _coordinator.BankContext.ExchangeRates.Local.Where(r =>
+                dgvExchangeRates.DataSource = _coordinator.GetAllExchangeRates().Where(r =>
                 r.FromCurrencyID == frm.FromCurrency.ID &&
-                r.ToCurrencyID   == frm.ToCurrency.ID).ToList();
+                r.ToCurrencyID == frm.ToCurrency.ID).ToList();
             else
-                dgvExchangeRates.DataSource = _coordinator.BankContext.ExchangeRates.Local.ToObservableCollection();
+                dgvExchangeRates.DataSource = _coordinator.GetAllExchangeRates(); //.ToObservableCollection();
         }
 
         private void btnExchangeRateEdit_Click(object sender, EventArgs e)
@@ -456,8 +456,8 @@ namespace Forms
                 ExchangeRate er = new();
                 try
                 {
-                    er.FromCurrency   = _coordinator.BankContext.Currencies.Single(c => c.Equals(frm.FromCurrency));
-                    er.ToCurrency     = _coordinator.BankContext.Currencies.Single(c => c.Equals(frm.ToCurrency));
+                    er.FromCurrency   = _coordinator.GetAllCurrencies().Single(c => c.Equals(frm.FromCurrency));
+                    er.ToCurrency     = _coordinator.GetAllCurrencies().Single(c => c.Equals(frm.ToCurrency));
                     er.FromCurrencyID = frm.FromCurrency.ID;
                     er.ToCurrencyID   = frm.ToCurrency.ID;
                     er.Rate           = frm.Rate;
@@ -483,8 +483,8 @@ namespace Forms
             if (dgvExchangeRates.SelectedRows.Count == 0)
                 return;
 
-            _coordinator.BankContext.Remove((ExchangeRate)dgvExchangeRates.SelectedRows[0].DataBoundItem);
-            _coordinator.BankContext.SaveChanges();
+            _coordinator.RemoveExchangeRate((ExchangeRate)dgvExchangeRates.SelectedRows[0].DataBoundItem);
+            //_coordinator.BankContext.SaveChanges();
 
             RefreshDgvExchangeRates();
         }
@@ -499,8 +499,8 @@ namespace Forms
                 Transaction t = new();
                 try
                 {
-                    t.FromAccount = _coordinator.BankContext.FiscalAccounts.Single(a => a.Equals(frm.FromAccount));
-                    t.ToAccount   = _coordinator.BankContext.FiscalAccounts.Single(a => a.Equals(frm.ToAccount));
+                    t.FromAccount = _coordinator.GetAllFAccounts().Single(a => a.Equals(frm.FromAccount));
+                    t.ToAccount   = _coordinator.GetAllFAccounts().Single(a => a.Equals(frm.ToAccount));
                     t.Amount      = frm.Amount;
                     t.Timestamp   = frm.Timestamp;
                 }
@@ -512,8 +512,8 @@ namespace Forms
 
                 if (Transaction.IsValidTransaction(t))
                 {
-                    _coordinator.BankContext.Add(t);
-                    _coordinator.BankContext.SaveChanges();
+                    _coordinator.AddTransaction(t);
+                    //_coordinator.BankContext.SaveChanges();
 
                     _coordinator.ExecuteTransaction(t);
 
@@ -528,11 +528,11 @@ namespace Forms
             frm.Text = "Search transactions";
 
             if (frm.ShowDialog() == DialogResult.OK)
-                dgvTransactions.DataSource = _coordinator.BankContext.Transactions.Local.Where(t =>
+                dgvTransactions.DataSource = _coordinator.GetAllTransactions().Where(t =>
                 t.FromAccount.Equals(frm.FromAccount) &&
                 t.ToAccount.Equals(frm.ToAccount)).ToList();
             else
-                dgvTransactions.DataSource = _coordinator.BankContext.Transactions.Local.ToObservableCollection();
+                dgvTransactions.DataSource = _coordinator.GetAllTransactions(); //.ToObservableCollection();
         }
 
         private void btnTransactionEdit_Click(object sender, EventArgs e)
@@ -552,8 +552,8 @@ namespace Forms
 
             if (frm.ShowDialog() == DialogResult.OK)
             {
-                selectedTransaction.FromAccount = _coordinator.BankContext.FiscalAccounts.Local.Single(f => f.Equals(frm.FromAccount));
-                selectedTransaction.ToAccount   = _coordinator.BankContext.FiscalAccounts.Local.Single(f => f.Equals(frm.ToAccount));
+                selectedTransaction.FromAccount = _coordinator.GetAllFAccounts().Single(f => f.Equals(frm.FromAccount));
+                selectedTransaction.ToAccount   = _coordinator.GetAllFAccounts().Single(f => f.Equals(frm.ToAccount));
                 selectedTransaction.Amount      = frm.Amount;
                 selectedTransaction.Timestamp   = frm.Timestamp;
                 _coordinator.BankContext.SaveChanges();
@@ -567,8 +567,8 @@ namespace Forms
             if (dgvTransactions.SelectedRows.Count == 0)
                 return;
 
-            _coordinator.BankContext.Remove((Transaction)dgvTransactions.SelectedRows[0].DataBoundItem);
-            _coordinator.BankContext.SaveChanges();
+            _coordinator.RemoveTransaction((Transaction)dgvTransactions.SelectedRows[0].DataBoundItem);
+            //_coordinator.BankContext.SaveChanges();
 
             RefreshDgvTransactions();
         }

@@ -499,7 +499,7 @@
             this.Controls.Add(this.tabControl);
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form1";
+            this.Text = "NPBank";
             this.tabControl.ResumeLayout(false);
             this.tpClient.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvClients)).EndInit();
